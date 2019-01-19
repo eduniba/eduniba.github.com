@@ -1,44 +1,12 @@
 <!DOCTYPE html>
 <head>
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-	<title>Hello, lights 3D AR!</title>
-	<!-- include three.js library -->
-	<script src='js/three.js'></script>
-	<!-- include jsartookit -->
-	<script src="jsartoolkit5/artoolkit.min.js"></script>
-	<script src="jsartoolkit5/artoolkit.api.js"></script>
-	<!-- include threex.artoolkit -->
-	<script src="threex/threex-artoolkitsource.js"></script>
-	<script src="threex/threex-artoolkitcontext.js"></script>
-	<script src="threex/threex-arbasecontrols.js"></script>
-  <script src="threex/threex-armarkercontrols.js"></script>
-  <script src="threex/EDNBinterfacciaAR.js"></script>
+	<title>EduNiBa</title>
+	
 </head>
 
 <body>
-  <div id="ciao"></div>
-
-  <script>
-    
-    function ruota(){
-      // AR3D.trasla("cubo0x2x2",new THREE.Vector3(1,0.2,0))
-      AR3D.animaRotazioneAffine(null,new THREE.Vector3(0,0,0),new THREE.Vector3(1,0,0),Math.PI/2,10)
-    }
-    AR3D.setup("ciao",{riferimento:false});
-    let raggio=2;
-    let centro=new THREE.Vector3(0,-3,0);
-    let punto=new THREE.Vector3(0,0,0);
-    let punto1=new THREE.Vector3(1,-3,1);
-    //let punto2=new THREE.Vector3(0,0,raggio);
-    // AR3D.sfera("s1",centro,1,{colore:"red"});
-    AR3D.punto("s2",punto,{colore:"blue",spessore:0.1});
-     AR3D.punto("s3",punto1,{colore:"green",spessore:0.1});
-     //AR3D.vettore("s1",punto,{colore:"red"});
-     //AR3D.vettore("s2",punto1,{colore:"green"});
-     //AR3D.vettore("s3",centro,{colore:"blue"});
-     AR3D.retta("r",new THREE.Vector3(0,0,0),new THREE.Vector3(1,-3,1));
-     AR3D.piano("p",centro,new THREE.Vector3(1,0,0),new THREE.Vector3(0,0,1),{lato:3,colore:"grey",trasparenza:0})
-    // AR3D.cubo("cubo",[1,1,1],1,{coloreFacce:0xff0000});
-  </script>
+  <div id="ciao">Ehò</div>
+  
 </body>
 </html>
