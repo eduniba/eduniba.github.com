@@ -4,250 +4,6 @@
     let _libreria={};
     let uniqueId=0;
 
-    //LAVAGNA3D
-    _libreria.Lavagna3D=function(larghezza, altezza, dove, opzioni){
-      
-
-      {//FASE DI SETUP
-        let contenitore,canvas3D;
-        {//STRUTTURA HTML
-        contenitore=document.getElementById(dove);
-        contenitore.className="contenitore-lavagna3D-EDNB";
-        contenitore.style.width=larghezza+"px";
-        contenitore.style.height=altezza+"px";
-
-        canvas3D=document.createElement("div");
-        canvas3D.id="lavagna3D";
-        canvas3D.className="canvas-lavagna3D-EDNB";
-        contenitore.appendChild(canvas3D);
-
-				//contenitore tastiera opzioni
-				let tastiera=document.createElement("div");
-				tastiera.id="opzioniLavagna3D";
-				tastiera.className="contenitore-tastiera-lavagna3D-EDNB contenitore-tastiera-lavagna3D-EDNB-chiusa";
-				//bottone toggle
-				let apriChiudi=document.createElement("button");
-				apriChiudi.className="apri-chiudi-lavagna3D-EDNB";
-				apriChiudi.innerHTML="&#9776";
-				apriChiudi.onclick=function(){
-					if(tastiera.getAttribute("aperta")){//chiudo
-						let figli=tastiera.children;
-						for(let i=1;i<figli.length;i++) figli[i].classList.toggle("nascosto-lavagna3D-EDNB");
-						tastiera.classList.toggle("contenitore-tastiera-lavagna3D-EDNB-chiusa");
-					}else{//apro
-						let figli=tastiera.children;
-						for(let i=1;i<figli.length;i++) figli[i].classList.toggle("nascosto-lavagna3D-EDNB");
-						tastiera.classList.toggle("contenitore-tastiera-lavagna3D-EDNB-chiusa");
-					}
-					tastiera.toggleAttribute("aperta");
-				};
-				tastiera.appendChild(apriChiudi);
-				let tooltipApriChiudi=document.createElement("span");
-				tooltipApriChiudi.className="tooltip";
-        tooltipApriChiudi.innerHTML="Opzioni";
-        apriChiudi.appendChild(tooltipApriChiudi);
-        //toggles
-        //griglie
-        let rigaGriglie=document.createElement("div");
-        rigaGriglie.className="riga-tastiera-lavagna3D-EDNB";
-
-          let etichettaGriglie=document.createElement("p");
-          etichettaGriglie.innerHTML="Griglie: ";
-          rigaGriglie.appendChild(etichettaGriglie);
-          let etichettaGriglieXY=document.createElement("p");
-          etichettaGriglieXY.innerHTML="XY ";
-          rigaGriglie.appendChild(etichettaGriglieXY);
-          let XYToggle=document.createElement("input");
-          XYToggle.type="checkbox";
-          XYToggle.toggleAttribute("checked");
-          XYToggle.id="toggleGrigliaXY";
-          rigaGriglie.appendChild(XYToggle);
-
-          let etichettaGriglieXZ=document.createElement("p");
-          etichettaGriglieXZ.innerHTML="XZ ";
-          rigaGriglie.appendChild(etichettaGriglieXZ);
-          let XZToggle=document.createElement("input");
-          XZToggle.type="checkbox";
-          XZToggle.id="toggleGrigliaXZ";
-          rigaGriglie.appendChild(XZToggle);
-
-          let etichettaGriglieYZ=document.createElement("p");
-          etichettaGriglieYZ.innerHTML="YZ ";
-          rigaGriglie.appendChild(etichettaGriglieYZ);
-          let YZToggle=document.createElement("input");
-          YZToggle.type="checkbox";
-          YZToggle.id="toggleGrigliaYZ";
-          rigaGriglie.appendChild(YZToggle);
-        
-        //appendo alla tastiera
-        tastiera.appendChild(rigaGriglie);
-
-        let rigaPiani=document.createElement("div");
-        rigaPiani.className="riga-tastiera-lavagna3D-EDNB";
-
-          let etichettaPiani=document.createElement("p");
-          etichettaPiani.innerHTML="Piani: ";
-          rigaPiani.appendChild(etichettaPiani);
-          let etichettaPianiXY=document.createElement("p");
-          etichettaPianiXY.innerHTML="XY ";
-          rigaPiani.appendChild(etichettaPianiXY);
-          let pianoXYToggle=document.createElement("input");
-          pianoXYToggle.type="checkbox";
-          pianoXYToggle.id="togglePianoXY";
-          pianoXYToggle.toggleAttribute("checked");
-          rigaPiani.appendChild(pianoXYToggle);
-
-          let etichettaPianiXZ=document.createElement("p");
-          etichettaPianiXZ.innerHTML="XZ ";
-          rigaPiani.appendChild(etichettaPianiXZ);
-          let pianoXZToggle=document.createElement("input");
-          pianoXZToggle.type="checkbox";
-          pianoXZToggle.id="togglePianoXZ";
-          rigaPiani.appendChild(pianoXZToggle);
-
-          let etichettaPianiYZ=document.createElement("p");
-          etichettaPianiYZ.innerHTML="YZ ";
-          rigaPiani.appendChild(etichettaPianiYZ);
-          let pianoYZToggle=document.createElement("input");
-          pianoYZToggle.type="checkbox";
-          pianoYZToggle.id="togglePianoYZ";
-          rigaPiani.appendChild(pianoYZToggle);
-
-        //appendo alla tastiera
-        tastiera.appendChild(rigaPiani);
-        
-        //camera
-        let rigaCamera=document.createElement("div");
-        rigaCamera.className="riga-tastiera-lavagna3D-EDNB";
-
-          let etichettaCamera=document.createElement("p");
-          etichettaCamera.innerHTML="Prospettiva ";
-          rigaCamera.appendChild(etichettaCamera);
-          let cameraToggle=document.createElement("input");
-          cameraToggle.type="checkbox";
-          cameraToggle.toggleAttribute("checked");
-          cameraToggle.addEventListener("change",function(){
-            if(this.checked==false){//setta la camera ortografica
-              var posizione=camera.position.clone();
-              camera=new THREE.OrthographicCamera(-larghezza/200,larghezza/200,altezza/200,-altezza/200,0.1,1000);
-              camera.position.x=posizione.x;
-              camera.position.y=posizione.y;
-              camera.position.z=posizione.z;
-              camera.lookAt(new THREE.Vector3(0,0,0));
-              // this.perspective="Orthographic";
-              controls=new THREE.OrbitControls(camera,renderer.domElement);
-            }else {//setta la camera prospettica
-              var posizione=camera.position.clone();
-              camera=new THREE.PerspectiveCamera(25,larghezza/altezza,0.1,2000);
-              camera.position.x=posizione.x;
-              camera.position.y=posizione.y;
-              camera.position.z=posizione.z;
-              camera.lookAt(new THREE.Vector3(0,0,0));
-              // this.perspective="Perspective";
-              controls=new THREE.OrbitControls(camera,renderer.domElement);
-            }
-          })
-          rigaCamera.appendChild(cameraToggle);
-
-        //appendo alla tastiera
-        tastiera.appendChild(rigaCamera);
-        
-        
-				let figli=tastiera.children;
-        for(let i=1;i<figli.length;i++) figli[i].classList.toggle("nascosto-lavagna3D-EDNB");
-        
-				if(globalOpt.opzioni) contenitore.appendChild(tastiera);
-        }//fine STRUTTURA HTML
-
-        //controlla se c'è webgl sul browser
-        if(Detector.webgl){
-          renderer=new THREE.WebGLRenderer({antialias:true});
-        }else{renderer=new THREE.CanvasRenderer();}
-        //crea la scena: sfondo, dimensioni, la div da usare
-        scena=new THREE.Scene();
-        scena.background=new THREE.Color(globalOpt.coloreSfondo);
-        //disattiva il comportamento di default del drag del mouse
-        canvas3D.addEventListener("mousedown",function(e){
-          e.preventDefault();
-        },false);
-        //setta luci e atmosfera
-        //luci
-
-        //dimensioni
-        renderer.setSize(larghezza,altezza);
-        //attacc il treddì al render di pagina
-        canvas3D.appendChild(renderer.domElement);
-        renderer.domElement.id="context";
-        //gira asse z in su
-        THREE.Object3D.DefaultUp.set(0.0,0.0,1.0);
-
-        //setta la camera
-        camera=new THREE.PerspectiveCamera(25,larghezza/altezza,0.1,2000);
-        camera.position.set(...globalOpt.posizioneTelecamera);
-        scena.add(camera);
-
-        //controlli e raycaster
-        controlli=new THREE.OrbitControls(camera,renderer.domElement);
-        if(!globalOpt.controlloTelecamera) controlli.enabled=false;
-        raycaster=new THREE.Raycaster();
-
-        mouse=new THREE.Vector2(); //vettore del mouse (bidimensionale)
-
-        rayfire=false;
-
-        //avvia le funzioni di render
-        function animate(){
-          requestAnimationFrame(animate);
-          controlli.update();
-          if(rayfire){//raycast
-            raycaster.setFromCamera(mouse,camera);
-            var intersects=raycaster.intersectObjects(scena.children);
-            if(globalOpt.raycastCallback!=null) globalOpt.raycastCallback(intersects); 
-            //spengo raycasting
-            rayfire=false;
-          }
-          renderer.render(scena,camera);
-        }
-        if(globalOpt.riferimento){
-          this.inizializzaAssi(riferimentoDef.rangeMassimo);
-          this.inizializzaPiani(riferimentoDef.rangeMassimo);
-        }
-        animate();
-
-        
-        {//LISTENERS
-          //mouse
-          let oldMouse=[0,0];
-          function localizzaMouse(e){
-            rayfire=true;
-            let rect=canvas3D.getBoundingClientRect();
-            mouse.x=(event.clientX - rect.left)/larghezza*2-1;
-            mouse.y=-(event.clientY - rect.top)/altezza*2+1;//invertire y
-          }
-          canvas3D.addEventListener("mousedown",function(e){
-            let rect=canvas3D.getBoundingClientRect();
-            oldMouse[0]=(event.clientX - rect.left)/larghezza*2-1;
-            oldMouse[1]=-(event.clientY - rect.top)/altezza*2+1;//invertire y
-          },false)
-          canvas3D.addEventListener("mouseup",function(e){
-            let tolleranza=0.01;
-            let rect=canvas3D.getBoundingClientRect();
-            let newMouse=[
-              (event.clientX - rect.left)/larghezza*2-1,
-              -(event.clientY - rect.top)/altezza*2+1
-            ];
-            if(Math.hypot(oldMouse[0]-newMouse[0],oldMouse[1]-newMouse[1])<tolleranza){
-              localizzaMouse(e);
-            }
-          },false)
-        }//fine LISTENERS
-      }//fine SETUP
-
-    
-
-    }
-    //FINE LAVAGNA
-
     //ELEMENTI AERRE
     var scenaAR, camera, renderer, clock, deltaTime, totalTime;
     var arToolkitSource, arToolkitContext;
@@ -267,6 +23,12 @@
       raycastCallback:null
     }
 
+    let trasformazioneDefault={
+      scala:0.10,
+      traslazione:new THREE.Vector3(0,0.25,0),//new THREE.Vector3(0,1,0),
+      rotazione:new THREE.Euler(Math.PI/2,0,0,"XYZ")
+    }
+
     let oggetti={
       fissi:[],
       cancellabili:[]
@@ -274,11 +36,7 @@
     
 
     {//TRASFORMAZIONI
-      let trasformazioneDefault={
-        scala:0.25,
-        traslazione:new THREE.Vector3(0,0,0),//new THREE.Vector3(0,1,0),
-        rotazione:new THREE.Euler(0,0,0,"XYZ")//new THREE.Euler(-Math.PI/2,0,0,"XYZ")
-      }
+      
       function trasformaDefaultMisure(misura){
         return misura*trasformazioneDefault.scala;
       }
@@ -776,6 +534,7 @@
         geometria.computeVertexNormals();
 
         let listaFacce = new THREE.Mesh(geometria, materialeFacce);
+        listaFacce.receiveShadow=true;
         poliedro.add(listaFacce);
 
         //mostra gli spigoli
@@ -793,6 +552,7 @@
         }
 
         poliedro.name=id;
+        poliedro.receiveShadow=true;
         scena.add(poliedro);
       }
       _libreria.poliedro.cambiaColore=function(id,coloreFacce,coloreSpigoli){
@@ -860,6 +620,77 @@
         ]
 
         this.poliedro(id,verticiCubo,facceCubo,opt);
+      }
+
+      let estrusioneDef={
+        coloreFacce:"white",
+        colorazioneFacce:"",
+        interno:false,
+        spigoli:true,
+        coloreSpigoli:0x000000,
+        spessoreSpigoli:1,
+      }
+      _libreria.estrusione=function(id,posizione,verticiBase,altezza,opzioni){
+        let opt=Object.assign({},oggettiDef);
+        Object.keys(estrusioneDef).forEach(function(key){
+          opt[key]=estrusioneDef[key];
+        })
+        if(opzioni!=null){
+          Object.keys(opzioni).forEach(function(key){
+            opt[key]=opzioni[key];
+          })
+        }
+        //rimuovo eventuale oggetto preesistente
+        if(opt.cancellabile){
+          this.cancellaOggetto(id);
+          oggetti.cancellabili.push(id);
+        }else{
+          if(oggetti.fissi.indexOf(id)==-1) oggetti.fissi.push(id);
+        }
+
+        
+        let vertici=[];
+        let numeroVerticiBase=verticiBase.length;
+
+        for(let i=0;i<numeroVerticiBase;i++){//deep copy
+          vertici.push(verticiBase[i].slice());
+        }
+
+        for(let i=0;i<numeroVerticiBase;i++){
+          vertici.push([(vertici[i][0]+altezza[0]),(vertici[i][1]+altezza[1]),(vertici[i][2]+altezza[2])]);
+        }
+
+        //traslazione
+        let traslazione;
+        if(!Array.isArray(posizione)) traslazione=[posizione.x,posizione.y,posizione.z];
+        else traslazione=posizione.slice();
+        vertici.forEach(el=>{
+          el.forEach((p,ind)=>{
+            el[ind]+=traslazione[ind];
+          })
+        })
+
+        //facce di base
+        let facciaBase1=[];
+        let facciaBase2=[];
+        for(let i=0;i<numeroVerticiBase;i++){
+          facciaBase1[numeroVerticiBase-i-1]=i;
+          facciaBase2[i]=(i+numeroVerticiBase);
+        }
+        let facce=[
+          facciaBase1,
+          facciaBase2
+        ]
+        //facce laterali
+        for(let i=0;i<numeroVerticiBase;i++){
+          let a=numeroVerticiBase-2-i;
+          if(a<0) a=numeroVerticiBase-1;
+          let b=i+1;
+          if(b>=numeroVerticiBase) b=0;
+          facce.push([facciaBase1[numeroVerticiBase-1-i],facciaBase1[a],facciaBase2[b],facciaBase2[i]])
+        }
+
+        this.poliedro(id,vertici,facce,opt);
       }
 
       //HELPERS
@@ -1053,9 +884,12 @@
     {//FUNZIONI SETUP
       _libreria.setup=function(dove,opzioni){
         let markerOpt={
-          detectionMode:"mono",
-          marker:"hiro",
-          tipoMarker:"pattern"
+          // detectionMode:"mono",
+          // marker:"elena",
+          // tipoMarker:"pattern",
+          detectionMode:"mono_and_matrix",
+          tipoMarker:"barcode",
+          numeroBarcode:"20",
         }
         if(opzioni!=null){
           Object.keys(opzioni).forEach(chiave=>{
@@ -1077,10 +911,11 @@
         scenaAR = new THREE.Scene();
         //setta luci e atmosfera
         //luci
-        let luceAmbiente=new THREE.AmbientLight(globalOpt.coloreLuci,0.6);
+        let luceAmbiente=new THREE.AmbientLight(globalOpt.coloreLuci,0.2);
         scenaAR.add(luceAmbiente);
-        let luceDirezionale = new THREE.DirectionalLight(globalOpt.coloreLuci,1);
+        let luceDirezionale = new THREE.DirectionalLight(globalOpt.coloreLuci,1.5);
         luceDirezionale.position.set(5,5,5);
+        luceDirezionale.castShadow=true;
         scenaAR.add(luceDirezionale);
         //nebbia
         scenaAR.fog=new THREE.Fog(globalOpt.coloreSfondo,40,80);
@@ -1140,6 +975,7 @@
         arToolkitContext = new THREEx.ArToolkitContext({
           cameraParametersUrl: 'data/camera_para.dat',
           detectionMode: markerOpt.detectionMode,
+		      matrixCodeType: "3x3",
           imageSmoothingEnabled : true,
         });
         
@@ -1164,10 +1000,9 @@
             patternUrl: "data/"+markerOpt.marker+".patt",
           })
         }else if(markerOpt.tipoMarker=="barcode"){
-          markerControls1=new THREEx.ArMarkerControls(arToolkitContext, scena, {
-            size:1,
-            type: markerOpt.tipoMarker,
-            barcodeValue: markerOpt.marker,
+          markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, scena, {
+            type: "barcode",
+            barcodeValue: 20,
           })
         }
 
