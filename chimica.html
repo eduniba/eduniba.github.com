@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Hello, lights 3D AR!</title>
+	<!-- include three.js library -->
+	<script src='js/three.js'></script>
+	<!-- include jsartookit -->
+	<script src="jsartoolkit5/artoolkit.min.js"></script>
+	<script src="jsartoolkit5/artoolkit.api.js"></script>
+	<!-- include threex.artoolkit -->
+	<script src="threex/threex-artoolkitsource.js"></script>
+	<script src="threex/threex-artoolkitcontext.js"></script>
+	<script src="threex/threex-arbasecontrols.js"></script>
+  <script src="threex/threex-armarkercontrols.js"></script>
+  <script src="threex/EDNBinterfacciaAR.js"></script>
+</head>
+
+<body>
+  <div id="sfondo" style="z-index:10;"></div>
+  <button style="font-size:150%; position:absolute; top:20px; left:20px; z-index:90" onclick=appari()>How to</button>
+  <button style="font-size:150%; position:absolute; top:60px; left:20px; z-index:90" onclick=disegnaMetano()>Metano</button>
+  <button style="font-size:150%; position:absolute; top:60px; left:120px; z-index:90" onclick=disegnaEtilene()>Etilene</button>
+  <div id="info" style="display:flex; flex-direction:column; background-color:white; z-index:99; position:absolute; left:20%; top:20%; width:60%; border-radius:5px; padding:10px; opacity: 0.6">
+    <p>Per cominciare, acconsenti all'utilizzo della telecamera ed attendi un attimo.</p>
+    <p>
+      Benvenuti in questa piccola tech-demo per strumenti di apprendimento per la chimica. Puntate
+      la telecamera al marker per osservare la struttura molecolare e osservarla da angoli
+      differenti. Un tap sugli atomi permette di visualizzare ulteriori informazioni.
+    </p>
+    <div style="display:flex; justify-content: center; text-align: center">
+      <img src=".\data\barcode20.png" style="width:100px; height:100px">
+      <img src=".\data\clip1.png" style="height:100px">
+      <div style="width:15px"></div>
+      <img src=".\data\clip2.png" style="height:100px">
+    </div>
+    <p>
+      Click anywhere to hide this screen, click the Info button to show again.
+    </p>
+  </div>
+  <div id="info" style="display:flex; flex-direction:column; align-items: center; background-color:white; z-index:99; position:absolute; left:30%; bottom:5%; width:40%; border-radius:5px; padding:5px; opacity: 0.6">
+    <p id="nomeComposto" style="font-size: larger; font-weight: bold;">Scegli una molecola</p>
+    <p id="infoAtomo" style="font-weight: bold;">Clicca su un atomo</p>
+  </div>
+  <script>
+    function appari(){
+      document.getElementById("info").style.display="block";
+    }
+
+    document.getElementById("info").addEventListener("click", function(){
+      document.getElementById("info").style.display="none";
+    })
+    document.getElementById("sfondo").addEventListener("click", function(){
+      document.getElementById("info").style.display="none";
+    })
+
+    var scala=4;
+    let metano={
+      id:"metano",
+      //vertici dal centro, lato del tetraedro 2
+      A:new THREE.Vector3(scala*Math.sqrt(8/9),scala*0,scala*1/3),
+      B:new THREE.Vector3(-scala*Math.sqrt(2/9),scala*Math.sqrt(2/3),scala*1/3),
+      C:new THREE.Vector3(-scala*Math.sqrt(2/9),-scala*Math.sqrt(2/3),scala*1/3),
+      D:new THREE.Vector3(0,0,-scala*1),
+      O:new THREE.Vector3(0,0,0),
+    }
+
+    var scala2=3;
+    let etilene={
+      id:"etilene",
+      //vertici dal centro, lato del tetraedro 2
+      A:new THREE.Vector3(scala2*1,0,0),
+      A1:new THREE.Vector3(-scala2*1,0,0),
+      nodoAa:new THREE.Vector3(scala2*1,scala2*0.1,0),
+      nodoAb:new THREE.Vector3(scala2*1,-scala2*0.1,0),
+      nodoA1a:new THREE.Vector3(-scala2*1,scala2*0.1,0),
+      nodoA1b:new THREE.Vector3(-scala2*1,-scala2*0.1,0),
+      B:new THREE.Vector3(scala2*1+1.63*scala2*Math.cos(Math.PI/3),1.63*scala2*Math.sin(Math.PI/3),0),
+      B1:new THREE.Vector3(-scala2*1-1.63*scala2*Math.cos(Math.PI/3),1.63*scala2*Math.sin(Math.PI/3),0),
+      C:new THREE.Vector3(scala2*1+1.63*scala2*Math.cos(Math.PI/3),-1.63*scala2*Math.sin(Math.PI/3),0),
+      C1:new THREE.Vector3(-scala2*1-1.63*scala2*Math.cos(Math.PI/3),-1.63*scala2*Math.sin(Math.PI/3),0),
+    }
+    
+    let colori=[
+      0xff0000,0xff00ff,0x00ff00,0x0000ff,0xffff00,0x00ffff
+    ]
+
+    function disegnaMetano(){
+      document.getElementById("nomeComposto").innerHTML="Metano:  CH<sub>4</sub>      16,04 g/mol";
+      document.getElementById("infoAtomo").innerHTML="Clicca su un atomo";
+      var raggioSfere=0.6;
+      AR3D.cancellaLavagna();
+      AR3D.sfera("C",metano.O,2*raggioSfere,{colore:colori[0]});
+      AR3D.sfera("H1",metano.A,raggioSfere,{colore:colori[3]});
+      AR3D.sfera("H2",metano.B,raggioSfere,{colore:colori[3]});
+      AR3D.sfera("H3",metano.C,raggioSfere,{colore:colori[3]});
+      AR3D.sfera("H4",metano.D,raggioSfere,{colore:colori[3]});
+
+      AR3D.segmento("legameCH1",metano.O,metano.A,{colore:"white"});
+      AR3D.segmento("legameCH2",metano.O,metano.B,{colore:"white"});
+      AR3D.segmento("legameCH3",metano.O,metano.C,{colore:"white"});
+      AR3D.segmento("legameCH4",metano.O,metano.D,{colore:"white"});
+    }
+
+    function disegnaEtilene(){
+      document.getElementById("nomeComposto").innerHTML="Etilene:  C<sub>2</sub>H<sub>4</sub>      28.05 g/mol";
+      document.getElementById("infoAtomo").innerHTML="Clicca su un atomo";
+      var raggioSfere=0.6;
+      AR3D.cancellaLavagna();
+      AR3D.sfera("C1",etilene.A,raggioSfere*2,{colore:colori[0]});
+      AR3D.sfera("C2",etilene.A1,raggioSfere*2,{colore:colori[0]});
+      AR3D.sfera("H1",etilene.B,raggioSfere,{colore:colori[3]});
+      AR3D.sfera("H2",etilene.B1,raggioSfere,{colore:colori[3]});
+      AR3D.sfera("H3",etilene.C,raggioSfere,{colore:colori[3]});
+      AR3D.sfera("H4",etilene.C1,raggioSfere,{colore:colori[3]});
+
+      AR3D.segmento("legameCH1",etilene.A,etilene.B,{colore:"white"});
+      AR3D.segmento("legameCH2",etilene.A,etilene.C,{colore:"white"});
+      AR3D.segmento("legameCH3",etilene.A1,etilene.B1,{colore:"white"});
+      AR3D.segmento("legameCH4",etilene.A1,etilene.C1,{colore:"white"});
+
+      AR3D.segmento("legameCC1",etilene.nodoAa,etilene.nodoA1a,{colore:"white"});
+      AR3D.segmento("legameCC2",etilene.nodoAb,etilene.nodoA1b,{colore:"white"});
+    }
+    
+    function raycast(intersezione){
+      if(intersezione.length>0){
+        nomiCarbonio=["C","C1","C2"];
+        nomiIdro=["H1","H2","H3","H4"];
+        if(nomiCarbonio.indexOf(intersezione[0].object.name)!=-1){
+          document.getElementById("infoAtomo").innerHTML="C      Carbonio, non metalli      12,0107u";
+        }else if(nomiIdro.indexOf(intersezione[0].object.name)!=-1){
+          document.getElementById("infoAtomo").innerHTML="H      Idrogeno, non metalli      1,00794u";
+        }
+      }
+    }
+
+    function avvia(){
+      document.getElementById("sfondo").innerHTML="";
+      AR3D.setup("sfondo",{raycastCallback:raycast,riferimento:false});
+      AR3D.getOpzioniGlobali().raycastCallback=raycast;
+
+    }
+
+    avvia();
+
+
+    function ruota(){
+      // AR3D.trasla("cubo0x2x2",new THREE.Vector3(1,0.2,0))
+      AR3D.animaRotazioneAffine(null,new THREE.Vector3(0,0,0),new THREE.Vector3(1,0,0),Math.PI/2,10)
+    }
+    // AR3D.setup("ciao",{raycastCallback:raycast,riferimento:false});
+    let raggio=2;
+    // let centro=new THREE.Vector3(0,0,0);
+    // let punto=new THREE.Vector3(raggio,0,0);
+    // let punto1=new THREE.Vector3(0,raggio,0);
+    let punto2=new THREE.Vector3(0,0,raggio);
+    // AR3D.sfera("s1",centro,1,{colore:"red"});
+    // AR3D.punto("s2",punto,{colore:"green",spessore:0.1});
+    // AR3D.vettore("s1",punto,{colore:"red",spessore:0.05});
+    // AR3D.vettore("s2",punto1,{colore:"green",spessore:0.05});
+    // AR3D.vettore("s3",punto2,{colore:"blue",spessore:0.05});
+    // AR3D.retta("r",punto,new THREE.Vector3(-1,1,0));
+    // AR3D.piano("p",centro,new THREE.Vector3(1,0,0),new THREE.Vector3(0,1,0),{lato:3})
+    // AR3D.cubo("cubo",[1,1,1],1,{coloreFacce:0xff0000});
+  </script>
+</body>
+</html>
