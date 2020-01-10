@@ -37,20 +37,23 @@
       Click anywhere to hide this screen, click the Info button to show again.
     </p>
   </div>
-  <div id="info" style="display:flex; flex-direction:column; align-items: center; background-color:white; z-index:99; position:absolute; left:30%; bottom:5%; width:40%; border-radius:5px; padding:5px; opacity: 0.6">
+  <div id="infoMolecola" style="display:none; flex-direction:column; align-items: center; background-color:white; z-index:99; position:absolute; left:30%; bottom:5%; width:40%; border-radius:5px; padding:5px; opacity: 0.6">
     <p id="nomeComposto" style="font-size: larger; font-weight: bold;">Scegli una molecola</p>
     <p id="infoAtomo" style="font-weight: bold;">Clicca su un atomo</p>
   </div>
   <script>
     function appari(){
       document.getElementById("info").style.display="block";
+      document.getElementById("infoMolecola").style.display="none";
     }
 
     document.getElementById("info").addEventListener("click", function(){
       document.getElementById("info").style.display="none";
+      document.getElementById("infoMolecola").style.display="flex";
     })
     document.getElementById("sfondo").addEventListener("click", function(){
       document.getElementById("info").style.display="none";
+      document.getElementById("infoMolecola").style.display="flex";
     })
 
     var scala=4;
