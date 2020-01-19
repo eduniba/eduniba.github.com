@@ -109,7 +109,7 @@
               let deltaB=Math.floor(255/o);
               let colorAcceso="rgb("+(i*deltaR)+","+(j*deltaG)+","+(k*deltaB)+")";
               if(i==0&&j==0&&k==0) colorAcceso=0xffffff;
-              opzioni={coloreFacce:colorAcceso,coloreSpigoli:0x000000};
+              opzioni={colorazioneFacce:"sequenza",coloreSpigoli:0x000000};
               AR3D.cubo("cubo"+i+"x"+j+"x"+k,[origine[0]+i,origine[1]+j,origine[2]+k],1,opzioni);
             }else if(matrice[i][j][k]==0){
               AR3D.cubo("cubo"+i+"x"+j+"x"+k,[origine[0]+i,origine[1]+j,origine[2]+k],1,opzioni);
