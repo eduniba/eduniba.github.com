@@ -130,7 +130,7 @@
               let deltaB=Math.floor(255/o);
               let colorAcceso="rgb("+(i*deltaR)+","+(j*deltaG)+","+(k*deltaB)+")";
               if(i==0&&j==0&&k==0) colorAcceso=0xffffff;
-              opzioni={colorazioneFacce:"sequenza",coloreSpigoli:0x000000};
+              opzioni={coloreFacce:colorAcceso,coloreSpigoli:0x000000};
               AR3D.poliedro.cambiaColore("cubo"+i+"x"+j+"x"+k,opzioni.coloreFacce,opzioni.coloreSpigoli);
             }else if(matrice[i][j][k]==0){
               AR3D.poliedro.cambiaColore("cubo"+i+"x"+j+"x"+k,opzioni.coloreFacce,opzioni.coloreSpigoli);
