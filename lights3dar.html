@@ -123,14 +123,14 @@
       for(let i=0;i<m;i++){
         for(let j=0;j<n;j++){
           for(let k=0;k<o;k++){
-            let opzioni={coloreFacce:0x000000,coloreSpigoli:0xffffff}//,trasparente:true,trasparenza:0.8};
+            let opzioni={colorazioneFacce:"sequenza",coloreFacce:0x000000,coloreSpigoli:0xffffff}//,trasparente:true,trasparenza:0.8};
             if(matrice[i][j][k]==1){
               let deltaR=Math.floor(255/m);
               let deltaG=Math.floor(255/n);
               let deltaB=Math.floor(255/o);
               let colorAcceso="rgb("+(i*deltaR)+","+(j*deltaG)+","+(k*deltaB)+")";
               if(i==0&&j==0&&k==0) colorAcceso=0xffffff;
-              opzioni={coloreFacce:colorAcceso,coloreSpigoli:0x000000};
+              opzioni={colorazioneFacce:"sequenza",coloreFacce:colorAcceso,coloreSpigoli:0x000000};
               AR3D.poliedro.cambiaColore("cubo"+i+"x"+j+"x"+k,opzioni.coloreFacce,opzioni.coloreSpigoli);
             }else if(matrice[i][j][k]==0){
               AR3D.poliedro.cambiaColore("cubo"+i+"x"+j+"x"+k,opzioni.coloreFacce,opzioni.coloreSpigoli);
